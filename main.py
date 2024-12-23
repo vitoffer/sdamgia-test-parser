@@ -29,9 +29,17 @@ for task in tasks:
 	n_page = 1
 	ans = []
 	while len(ans) == 0:
-
 		params = {"search": usable_task, "cb": 1, "body": 3, 'page': n_page}
-		r = requests.get(base_url, params=params)
+		try:
+			r = requests.get(base_url, params=params, timeout=1)
+			# print(k)
+		except requests.exceptions.Timeout:
+			print(f'{k}) *пропущен')
+			break
+		except requests.exceptions.RequestException as e:
+			print(f"Произошла ошибка: {e}")
+			break
+
 		request_text = r.text.replace("&shy", '').replace(";\xad", "").replace("\xad", "")
 		soup_reponses = BeautifulSoup(request_text, 'html.parser')
 		maindiv_answers = soup_reponses.find_all(name="div", attrs={"class": "prob_maindiv"})
@@ -47,5 +55,7 @@ for task in tasks:
 
 		n_page += 1
 
-	print(str(k) + ')', " или ".join(ans))
+	if len(ans):
+		print(str(k) + ')', " или ".join(ans))
+
 	k += 1
