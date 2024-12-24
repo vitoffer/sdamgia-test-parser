@@ -8,7 +8,7 @@ with open('./input.txt', encoding="utf-8") as f:
 
 soup = BeautifulSoup(text, 'html.parser')
 
-all_divs = soup.find_all(name="div", attrs={"class": "pbody"})
+all_divs = soup.find_all(name="div", attrs={"class": "pbody"})[1::2]
 tasks = []
 for div in all_divs:
 	tasks.append(div)
