@@ -38,14 +38,11 @@ for link in links_for_search_answers:
 		answer_div = maindiv_answer.find(name="div", attrs={"class": "answer"})
 
 		if not answer_div:
-			print(maindiv_answer)
+			continue
 
 		ans_text = answer_div.get_text()
 		# print(f"{answer_id}: {ans_text[ans_text.rfind(': ') + 2:]}")
 		dct[answer_id] = ans_text[ans_text.rfind(': ') + 2:]
 
-	with open("rus.json", "a") as file:
-		file.truncate()
-
-	with open("rus.json", "w+") as f:
-			json.dump(dct, f)
+with open("rus.json", "w") as f:
+	json.dump(dct, f)

@@ -40,17 +40,21 @@ for link in links_for_search_answers:
 	maindiv_answers = soup_reponses.find_all(name="div", attrs={"class": "prob_maindiv"})
 
 	for maindiv_answer in maindiv_answers:
-		answer_soup = BeautifulSoup(str(maindiv_answer), 'html.parser')
-		answer_id = answer_soup.find(name="div", attrs={"class": "pbody"})['id']
-		answer_div = answer_soup.find(name="div", attrs={"class": "answer"})
+
+		maindiv_answer = maindiv_answer.parent
+		divs = maindiv_answer.find_all(name="div", attrs={"class": "pbody"})
+		for answer in divs:
+			if answer.has_attr('id'):
+				answer_id = answer['id']
+				break
+		answer_div = maindiv_answer.find(name="div", attrs={"class": "answer"})
 
 		if not answer_div:
-			print(maindiv_answer)
+			continue
 
 		ans_text = answer_div.get_text()
-		print(f"{answer_id}: {ans_text[ans_text.rfind(': ') + 2:]}")
+		# print(f"{answer_id}: {ans_text[ans_text.rfind(': ') + 2:]}")
 		dct[answer_id] = ans_text[ans_text.rfind(': ') + 2:]
 
-
-with open("dictionary.json", "w+") as f:
-    json.dump(dct, f)
+with open("mathem.json", "w") as f:
+	json.dump(dct, f)

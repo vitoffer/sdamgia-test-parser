@@ -8,11 +8,11 @@ with open('./input.txt', encoding="utf-8") as f:
 
 soup = BeautifulSoup(text, 'html.parser')
 
-all_divs = soup.find_all(name="div", attrs={"class": "pbody"})[1::2]
+all_divs = soup.find_all(name="div", attrs={"class": "pbody"})
 tasks = []
 for div in all_divs:
 	tasks.append(div)
-print(len(tasks))
+print(len(list(filter(lambda task: task.has_attr('id'), tasks))))
 
 k = 1
 
@@ -23,5 +23,8 @@ for task in tasks:
 	if not task_text.has_attr('id'):
 		continue
 	task_id = task_text['id']
-	print(str(k) + ')', dct[task_id])
+	if task_id in dct.keys():
+		print(str(k) + ')', dct[task_id])
+	else:
+		print(str(k) + ') не найден')
 	k += 1
